@@ -86,6 +86,34 @@ describe('hatch pattern', () => {
   })
 })
 
+describe('glitch pattern', () => {
+  const config: PatternConfig = { ...baseConfig, patternType: 'glitch' }
+
+  it('only produces rect ops', () => {
+    const ops = generatePattern(config)
+    ops.forEach(op => expect(op.type).toBe('rect'))
+  })
+
+  it('all rects have positive width and height', () => {
+    const ops = generatePattern(config)
+    ops.forEach(op => {
+      if (op.type === 'rect') {
+        expect(op.width).toBeGreaterThan(0)
+        expect(op.height).toBeGreaterThan(0)
+      }
+    })
+  })
+
+  it('covers the full page height', () => {
+    const ops = generatePattern(config)
+    const [, pageHeight] = PAPER_DIMS['A4']
+    const lastRect = ops[ops.length - 1]
+    if (lastRect.type === 'rect') {
+      expect(lastRect.y + lastRect.height).toBeGreaterThanOrEqual(pageHeight * 0.9)
+    }
+  })
+})
+
 describe('generatePattern', () => {
   it('returns an array of DrawingOps', () => {
     const ops = generatePattern(baseConfig)

@@ -114,4 +114,21 @@ function genHatch(rand: () => number, width: number, height: number, density: In
   }
   return ops
 }
-function genGlitch(r: () => number, _w: number, _h: number, _d: InkDensity): DrawingOp[] { return [{ type: 'dot', cx: r() * 100, cy: r() * 100, r: 1, gray: 128 }] }
+function genGlitch(rand: () => number, width: number, height: number, density: InkDensity): DrawingOp[] {
+  const minBarH = { low: 1.5, medium: 2, high: 3 }[density]
+  const maxBarH = { low: 3, medium: 5, high: 7 }[density]
+  const minGap  = { low: 4,   medium: 2, high: 1 }[density]
+  const maxGap  = { low: 8,   medium: 5, high: 3 }[density]
+  const ops: DrawingOp[] = []
+  let y = 0
+  while (y < height) {
+    const barH  = minBarH + rand() * (maxBarH - minBarH)
+    const gap   = minGap  + rand() * (maxGap  - minGap)
+    const xOff  = (rand() - 0.5) * 14
+    const barW  = width * (0.6 + rand() * 0.4)
+    const gray  = Math.floor(80 + rand() * 120)
+    ops.push({ type: 'rect', x: xOff, y, width: barW, height: barH, gray })
+    y += barH + gap
+  }
+  return ops
+}
