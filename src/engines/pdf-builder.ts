@@ -64,5 +64,5 @@ export async function buildPdf(ops: DrawingOp[], paperSize: PaperSize, pageCount
     await buildSinglePage(doc, ops, paperSize)
   }
   const bytes = await doc.save()
-  return new Blob([bytes], { type: 'application/pdf' })
+  return new Blob([new Uint8Array(bytes)], { type: 'application/pdf' })
 }

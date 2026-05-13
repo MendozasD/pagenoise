@@ -117,5 +117,5 @@ export async function buildTestSheet(paperSize: PaperSize): Promise<Blob> {
   line({ text: 'Signature & Date', x: margin, y, size: 8 })
 
   const bytes = await doc.save()
-  return new Blob([bytes], { type: 'application/pdf' })
+  return new Blob([new Uint8Array(bytes)], { type: 'application/pdf' })
 }
