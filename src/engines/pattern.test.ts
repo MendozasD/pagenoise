@@ -64,6 +64,28 @@ describe('stipple pattern', () => {
   })
 })
 
+describe('hatch pattern', () => {
+  const config: PatternConfig = { ...baseConfig, patternType: 'hatch' }
+
+  it('only produces line ops', () => {
+    const ops = generatePattern(config)
+    ops.forEach(op => expect(op.type).toBe('line'))
+  })
+
+  it('all lines have positive width', () => {
+    const ops = generatePattern(config)
+    ops.forEach(op => {
+      if (op.type === 'line') expect(op.width).toBeGreaterThan(0)
+    })
+  })
+
+  it('produces more lines at high density', () => {
+    const low = generatePattern({ ...config, inkDensity: 'low' })
+    const high = generatePattern({ ...config, inkDensity: 'high' })
+    expect(high.length).toBeGreaterThan(low.length)
+  })
+})
+
 describe('generatePattern', () => {
   it('returns an array of DrawingOps', () => {
     const ops = generatePattern(baseConfig)

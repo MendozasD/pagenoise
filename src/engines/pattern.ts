@@ -83,5 +83,35 @@ function genStipple(rand: () => number, width: number, height: number, density: 
   }
   return ops
 }
-function genHatch(r: () => number, _w: number, _h: number, _d: InkDensity): DrawingOp[] { return [{ type: 'dot', cx: r() * 100, cy: r() * 100, r: 1, gray: 128 }] }
+function genHatch(rand: () => number, width: number, height: number, density: InkDensity): DrawingOp[] {
+  const spacing = { low: 11, medium: 7, high: 5 }[density]
+  const lineWidth = { low: 0.4, medium: 0.5, high: 0.65 }[density]
+  const diag = Math.sqrt(width * width + height * height)
+  const cx = width / 2
+  const cy = height / 2
+  const ops: DrawingOp[] = []
+
+  const angles = [35 + rand() * 15, 125 + rand() * 15]
+  for (const baseAngle of angles) {
+    const gray = Math.floor(100 + rand() * 100)
+    const rad = (baseAngle * Math.PI) / 180
+    const cos = Math.cos(rad)
+    const sin = Math.sin(rad)
+    let d = -diag
+    while (d < diag * 2) {
+      const jitter = rand() * spacing * 0.3
+      ops.push({
+        type: 'line',
+        x1: cx + cos * (-diag) - sin * d,
+        y1: cy + sin * (-diag) + cos * d,
+        x2: cx + cos * diag - sin * d,
+        y2: cy + sin * diag + cos * d,
+        width: lineWidth,
+        gray,
+      })
+      d += spacing + jitter
+    }
+  }
+  return ops
+}
 function genGlitch(r: () => number, _w: number, _h: number, _d: InkDensity): DrawingOp[] { return [{ type: 'dot', cx: r() * 100, cy: r() * 100, r: 1, gray: 128 }] }
