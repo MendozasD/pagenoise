@@ -42,6 +42,28 @@ describe('charrain pattern', () => {
   })
 })
 
+describe('stipple pattern', () => {
+  const config: PatternConfig = { ...baseConfig, patternType: 'stipple' }
+
+  it('only produces dot ops', () => {
+    const ops = generatePattern(config)
+    ops.forEach(op => expect(op.type).toBe('dot'))
+  })
+
+  it('produces more dots at high density', () => {
+    const low = generatePattern({ ...config, inkDensity: 'low' })
+    const high = generatePattern({ ...config, inkDensity: 'high' })
+    expect(high.length).toBeGreaterThan(low.length)
+  })
+
+  it('all dots have positive radius', () => {
+    const ops = generatePattern(config)
+    ops.forEach(op => {
+      if (op.type === 'dot') expect(op.r).toBeGreaterThan(0)
+    })
+  })
+})
+
 describe('generatePattern', () => {
   it('returns an array of DrawingOps', () => {
     const ops = generatePattern(baseConfig)

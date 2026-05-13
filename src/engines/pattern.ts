@@ -67,6 +67,21 @@ function genCharRain(rand: () => number, width: number, height: number, density:
   }
   return ops
 }
-function genStipple(r: () => number, _w: number, _h: number, _d: InkDensity): DrawingOp[] { return [{ type: 'dot', cx: r() * 100, cy: r() * 100, r: 1, gray: 128 }] }
+function genStipple(rand: () => number, width: number, height: number, density: InkDensity): DrawingOp[] {
+  const coverage = { low: 0.10, medium: 0.20, high: 0.35 }[density]
+  const avgDotArea = Math.PI * 1.5 * 1.5
+  const count = Math.floor((width * height * coverage) / avgDotArea)
+  const ops: DrawingOp[] = []
+  for (let i = 0; i < count; i++) {
+    ops.push({
+      type: 'dot',
+      cx: rand() * width,
+      cy: rand() * height,
+      r: 0.8 + rand() * 1.4,
+      gray: Math.floor(60 + rand() * 130),
+    })
+  }
+  return ops
+}
 function genHatch(r: () => number, _w: number, _h: number, _d: InkDensity): DrawingOp[] { return [{ type: 'dot', cx: r() * 100, cy: r() * 100, r: 1, gray: 128 }] }
 function genGlitch(r: () => number, _w: number, _h: number, _d: InkDensity): DrawingOp[] { return [{ type: 'dot', cx: r() * 100, cy: r() * 100, r: 1, gray: 128 }] }
