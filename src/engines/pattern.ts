@@ -50,8 +50,23 @@ export function generatePattern(config: PatternConfig): DrawingOp[] {
   }
 }
 
-// Placeholders — implemented in Tasks 4–7. Call rand() so output is seed-dependent.
-function genCharRain(r: () => number, _w: number, _h: number, _d: InkDensity): DrawingOp[] { return [{ type: 'dot', cx: r() * 100, cy: r() * 100, r: 1, gray: 128 }] }
+const CHAR_POOL = 'ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789@#$%&*!?+=<>'
+
+function genCharRain(rand: () => number, width: number, height: number, density: InkDensity): DrawingOp[] {
+  const spacing = { low: 14, medium: 11, high: 8 }[density]
+  const baseSize = { low: 7, medium: 8.5, high: 10 }[density]
+  const ops: DrawingOp[] = []
+  for (let x = spacing / 2; x < width; x += spacing) {
+    for (let y = spacing; y < height; y += spacing) {
+      const char = CHAR_POOL[Math.floor(rand() * CHAR_POOL.length)]
+      const size = baseSize + (rand() - 0.5) * 3
+      const rotation = (rand() - 0.5) * 25
+      const gray = Math.floor(60 + rand() * 120)
+      ops.push({ type: 'char', x, y, char, size, rotation, gray })
+    }
+  }
+  return ops
+}
 function genStipple(r: () => number, _w: number, _h: number, _d: InkDensity): DrawingOp[] { return [{ type: 'dot', cx: r() * 100, cy: r() * 100, r: 1, gray: 128 }] }
 function genHatch(r: () => number, _w: number, _h: number, _d: InkDensity): DrawingOp[] { return [{ type: 'dot', cx: r() * 100, cy: r() * 100, r: 1, gray: 128 }] }
 function genGlitch(r: () => number, _w: number, _h: number, _d: InkDensity): DrawingOp[] { return [{ type: 'dot', cx: r() * 100, cy: r() * 100, r: 1, gray: 128 }] }

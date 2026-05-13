@@ -17,6 +17,31 @@ describe('PAPER_DIMS', () => {
   })
 })
 
+describe('charrain pattern', () => {
+  const config: PatternConfig = { ...baseConfig, patternType: 'charrain' }
+
+  it('only produces char ops', () => {
+    const ops = generatePattern(config)
+    ops.forEach(op => expect(op.type).toBe('char'))
+  })
+
+  it('produces more ops at high density than low density', () => {
+    const low = generatePattern({ ...config, inkDensity: 'low' })
+    const high = generatePattern({ ...config, inkDensity: 'high' })
+    expect(high.length).toBeGreaterThan(low.length)
+  })
+
+  it('all char ops have gray in [60, 255]', () => {
+    const ops = generatePattern(config)
+    ops.forEach(op => {
+      if (op.type === 'char') {
+        expect(op.gray).toBeGreaterThanOrEqual(60)
+        expect(op.gray).toBeLessThanOrEqual(255)
+      }
+    })
+  })
+})
+
 describe('generatePattern', () => {
   it('returns an array of DrawingOps', () => {
     const ops = generatePattern(baseConfig)
