@@ -1,5 +1,6 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
-import { PAPER_DIMS, PaperSize } from './pattern'
+import { PAPER_DIMS } from './pattern'
+import type { PaperSize } from './pattern'
 
 type TextLine = { text: string; x: number; y: number; size: number; bold?: boolean }
 

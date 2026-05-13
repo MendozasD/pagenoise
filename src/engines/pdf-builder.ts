@@ -1,5 +1,6 @@
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib'
-import { DrawingOp, PAPER_DIMS, PaperSize } from './pattern'
+import { PAPER_DIMS } from './pattern'
+import type { DrawingOp, PaperSize } from './pattern'
 
 function grayColor(gray: number) {
   const v = gray / 255
