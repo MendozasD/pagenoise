@@ -46,6 +46,33 @@ export default function App() {
     }
   }
 
+  async function handlePrint() {
+    setIsGenerating(true)
+    setError(null)
+    try {
+      const ops = generatePattern(patternConfig)
+      const blob = await buildPdf(ops, paperSize, pageCount)
+      const url = URL.createObjectURL(blob)
+      const iframe = document.createElement('iframe')
+      iframe.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;border:none;'
+      document.body.appendChild(iframe)
+      iframe.src = url
+      iframe.onload = () => {
+        setTimeout(() => {
+          iframe.contentWindow?.print()
+          setTimeout(() => {
+            URL.revokeObjectURL(url)
+            document.body.removeChild(iframe)
+          }, 60000)
+        }, 500)
+      }
+    } catch {
+      setError('Print failed — try downloading instead')
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
   async function handleTestSheet() {
     setIsGenerating(true)
     setError(null)
@@ -99,19 +126,20 @@ export default function App() {
             <button
               type="button"
               className="btn-primary"
-              onClick={handleGenerate}
+              onClick={handlePrint}
               disabled={isGenerating}
             >
-              {isGenerating ? 'Generating…' : `Generate ${pageCount} page${pageCount > 1 ? 's' : ''}`}
+              {isGenerating ? 'Generating…' : 'Print now'}
             </button>
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={handleTestSheet}
-              disabled={isGenerating}
-            >
-              Download test sheet
-            </button>
+            <div className="action-links">
+              <button type="button" className="link-btn" onClick={handleGenerate} disabled={isGenerating}>
+                Save PDF
+              </button>
+              <span className="action-links-sep">·</span>
+              <button type="button" className="link-btn" onClick={handleTestSheet} disabled={isGenerating}>
+                Test sheet
+              </button>
+            </div>
           </div>
         </section>
 
