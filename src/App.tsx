@@ -38,7 +38,7 @@ export default function App() {
     try {
       const ops = generatePattern(patternConfig)
       const blob = await buildPdf(ops, paperSize, pageCount)
-      downloadBlob(blob, `sanitizer-${seedToHex(seed).slice(0, 8)}-${pageCount}p.pdf`)
+      downloadBlob(blob, `pagenoise-${seedToHex(seed).slice(0, 8)}-${pageCount}p.pdf`)
     } catch {
       setError('PDF generation failed — try regenerating the seed')
     } finally {
@@ -51,7 +51,7 @@ export default function App() {
     setError(null)
     try {
       const blob = await buildTestSheet(paperSize)
-      downloadBlob(blob, `sanitizer-test-sheet-${paperSize}.pdf`)
+      downloadBlob(blob, `pagenoise-test-sheet-${paperSize}.pdf`)
     } catch {
       setError('Test sheet generation failed')
     } finally {
@@ -65,8 +65,8 @@ export default function App() {
         <div className="app-brand">
           <span className="app-icon">🌿</span>
           <div>
-            <h1 className="app-title">Paper Sanitizer</h1>
-            <p className="app-subtitle">Eco-friendly document privacy</p>
+            <h1 className="app-title">PageNoise</h1>
+            <p className="app-subtitle">Print noise. Stay private.</p>
           </div>
         </div>
         <button
@@ -123,7 +123,7 @@ export default function App() {
 
       <footer className="app-footer">
         <p>All processing happens in your browser. Nothing is uploaded. Ever.</p>
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer">Open source on GitHub ↗</a>
+        <a href="https://github.com/MendozasD/pagenoise" target="_blank" rel="noopener noreferrer">Open source on GitHub ↗</a>
       </footer>
     </div>
   )

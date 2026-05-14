@@ -1,73 +1,40 @@
-# React + TypeScript + Vite
+# PageNoise
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Generate cryptographically-seeded noise patterns to print over sensitive documents before recycling. No server. No uploads. Everything runs in your browser.
 
-Currently, two official plugins are available:
+**Live:** [pagenoise.davidmendoza.ch](https://pagenoise.davidmendoza.ch)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## What it does
 
-## React Compiler
+PageNoise generates obfuscation PDFs you print on top of documents containing personal data before putting them in the recycling bin — no shredder required.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Four patterns: character rain, stipple, cross-hatch, and glitch bars. Each pattern is seeded with a cryptographically random value so no two outputs are identical.
 
-## Expanding the ESLint configuration
+## Use
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Open the app
+2. Choose a pattern, paper size, and ink density
+3. Click **Generate** — PDF downloads instantly
+4. Print it and lay it over the document before recycling
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Not sure if a pattern covers well enough? Download the **test sheet** first and run a print test.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- React 19 + TypeScript 6 + Vite 8
+- [pdf-lib](https://pdf-lib.js.org/) for client-side PDF generation
+- Web Crypto API for seed generation
+- Zero backend, zero analytics
+
+## Local dev
+
+```bash
+npm install
+npm run dev      # http://localhost:5173
+npm run build    # outputs to dist/
+npm test
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## License
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+MIT
